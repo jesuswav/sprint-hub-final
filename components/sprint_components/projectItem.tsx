@@ -8,9 +8,14 @@ import { useThemeColor } from '@/hooks/useThemeColor'
 export type ThemedViewProps = ViewProps & {
   lightColor?: string
   darkColor?: string
+  projectName?: string
 }
 
-const ProjectItem = ({ lightColor, darkColor }: ThemedViewProps) => {
+const ProjectItem = ({
+  lightColor,
+  darkColor,
+  projectName,
+}: ThemedViewProps) => {
   const router = useRouter()
 
   const handlePress = () => {
@@ -37,7 +42,7 @@ const ProjectItem = ({ lightColor, darkColor }: ThemedViewProps) => {
   return (
     <TouchableOpacity onPress={handlePress}>
       <View style={[styles.itemContainer, { backgroundColor }]}>
-        <ThemedText style={{ fontSize: 22 }}>Proyect Item</ThemedText>
+        <ThemedText style={{ fontSize: 20 }}>{projectName}</ThemedText>
         <Ionicons name='arrow-forward-outline' size={32} color={iconColor} />
       </View>
     </TouchableOpacity>

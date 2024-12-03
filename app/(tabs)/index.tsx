@@ -27,7 +27,6 @@ export default function HomeScreen() {
 
   // Función para obtener datos desde un endpoint
   const getData = async () => {
-    console.log('Hola 1')
     setLoading(true)
     setError(null)
 
@@ -45,7 +44,7 @@ export default function HomeScreen() {
 
       const data = await response.json()
       setProjects(data) // Actualizar el estado con los datos recibidos
-      console.log('Response:', data)
+      // console.log('Response:', data)
     } catch (err: any) {
       setError(err.message)
       console.error('Fetch error:', err.message)
@@ -56,32 +55,28 @@ export default function HomeScreen() {
 
   useEffect(() => {
     // Llama a la función al montar el componente
-    console.log('Hola')
     getData()
   }, [])
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }
-    >
+    <ThemedView style={styles.HomeScreenContainer}>
       <ThemedView style={{ gap: 18 }}>
         {projects.map((item, index) => (
           <ThemedView key={index}>
-            <ProjectItem />
+            <ProjectItem projectName={item.name} />
           </ThemedView>
         ))}
       </ThemedView>
-    </ParallaxScrollView>
+    </ThemedView>
   )
 }
 
 const styles = StyleSheet.create({
+  HomeScreenContainer: {
+    flex: 1,
+    paddingVertical: 14,
+    paddingHorizontal: 8,
+  },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
