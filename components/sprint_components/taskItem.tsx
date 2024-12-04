@@ -4,21 +4,45 @@ import { ThemedText } from '../ThemedText'
 import { useRouter } from 'expo-router'
 import { useThemeColor } from '@/hooks/useThemeColor'
 
+// Interfaz para el tipo de datos
+interface Responsable {
+  _id: string
+  email: string
+  nombre: string
+}
+
+interface Item {
+  id: string
+  nombre: string
+  estado: string
+  fechaEntrega: string
+  fechaInicio: string
+  responsable: Responsable
+}
+
+// type for Tasks
+export type Task = {
+  id: string
+  name: string
+  // Agrega más propiedades según sea necesario
+}
+
 export type TaskItemProps = {
   title: string
+  task: Item
 }
 
 // Cálculo del ancho para los elementos en dos columnas
 const ITEM_SIZE = Dimensions.get('window').width / 2 - 20
 
-const TaskItem = ({ title }: TaskItemProps) => {
+const TaskItem = ({ title, task }: TaskItemProps) => {
   const router = useRouter()
 
   const handlePress = () => {
     // Navega a la pantalla de detalles pasando el arreglo completo en JSON
     router.push({
       pathname: '/taskPage',
-      params: { taskName: 'Task name' },
+      params: { taskName: 'Task name', tasks: JSON.stringify(task) },
     })
   }
 

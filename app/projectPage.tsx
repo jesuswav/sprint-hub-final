@@ -44,9 +44,6 @@ const numColumns = 2
 const ITEM_WIDTH = Dimensions.get('window').width / numColumns - 25
 
 export default function ProyectPage() {
-  // estado para guardar las tareas
-  const [projectTasks, setProjectTasks] = useState()
-
   // recibir las tareas por medio de parametros de router
   const { projectName, tasks } = useLocalSearchParams<{
     projectName?: string
@@ -59,7 +56,7 @@ export default function ProyectPage() {
   // Asegúrate de que `item` sea del tipo `Item`, que coincide con la estructura de `data`
   const renderItem = ({ item }: { item: Item }) => (
     <View style={styles.itemContainer}>
-      <TaskItem title={item.nombre} />
+      <TaskItem title={item.nombre} task={item} />
     </View>
   )
 
