@@ -241,8 +241,8 @@ const TaskForm: React.FC<FormModalProps> = ({
           style={{ height: 180, width: 300 }}
         >
           <Picker.Item key={1} label={'pendiente'} value={'pendiente'} />
-          <Picker.Item key={1} label={'en progreso'} value={'en progreso'} />
-          <Picker.Item key={1} label={'terminado'} value={'terminado'} />
+          <Picker.Item key={1} label={'en proceso'} value={'en proceso'} />
+          <Picker.Item key={1} label={'terminada'} value={'terminada'} />
         </Picker>
 
         {/* pickers para proyecto y responsable */}
