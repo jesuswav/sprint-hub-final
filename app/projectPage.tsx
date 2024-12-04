@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
-import { StyleSheet, View, FlatList, Dimensions } from 'react-native'
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  Dimensions,
+  Pressable,
+  Modal,
+} from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedFlatView } from '@/components/ThemedFlatView'
+import FormModal from '@/components/sprint_components/FormModal'
 
 // Componentes de la aplicación
 import TaskItem from '@/components/sprint_components/taskItem'
@@ -60,19 +68,61 @@ export default function ProyectPage() {
     </View>
   )
 
+  // metodos para el modal
+  // metodos para el modal
+  const [isModalVisible, setModalVisible] = useState(false)
+
+  const openModal = () => setModalVisible(true)
+  const closeModal = () => setModalVisible(false)
+
   return (
-    <ThemedFlatView style={styles.HomeScreenContainer}>
-      <View style={styles.titleContainer}>
-        <ThemedText type='title'>Project Page</ThemedText>
-        <ThemedText type='subtitle'>{projectName}</ThemedText>
-      </View>
-      <FlatList
-        data={parsedTasks}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        numColumns={numColumns}
-        contentContainerStyle={styles.container}
-      />
+    <ThemedFlatView style={{ flex: 1, padding: 0 }}>
+      <ThemedFlatView style={styles.HomeScreenContainer}>
+        <View style={styles.titleContainer}>
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              width: '100%',
+              height: 80,
+              paddingHorizontal: 0,
+            }}
+          >
+            <ThemedText type='title'>Project Page</ThemedText>
+            <Pressable onPress={openModal}>
+              <ThemedText
+                style={{
+                  backgroundColor: '#F5A818',
+                  paddingVertical: 4,
+                  paddingHorizontal: 12,
+                  borderRadius: 12,
+                  textAlign: 'center', // Asegura que el texto esté centrado
+                }}
+              >
+                New Project
+              </ThemedText>
+            </Pressable>
+          </View>
+          <ThemedText type='subtitle'>{projectName}</ThemedText>
+        </View>
+        <FlatList
+          data={parsedTasks}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          numColumns={numColumns}
+          contentContainerStyle={styles.container}
+        />
+      </ThemedFlatView>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={closeModal}
+      >
+        <FormModal onClose={closeModal} />
+      </Modal>
     </ThemedFlatView>
   )
 }

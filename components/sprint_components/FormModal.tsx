@@ -33,7 +33,7 @@ const FormModal: React.FC<FormModalProps> = ({ onClose }) => {
         {/* Input de nombre */}
         <TextInput
           style={styles.input}
-          placeholder='Your Name'
+          placeholder='Project Name'
           placeholderTextColor='#888'
           value={name}
           onChangeText={setName}
@@ -42,7 +42,7 @@ const FormModal: React.FC<FormModalProps> = ({ onClose }) => {
         {/* Input de correo */}
         <TextInput
           style={styles.input}
-          placeholder='Your Email'
+          placeholder='Description'
           placeholderTextColor='#888'
           keyboardType='email-address'
           value={email}
@@ -51,7 +51,7 @@ const FormModal: React.FC<FormModalProps> = ({ onClose }) => {
 
         {/* Botones */}
         <Pressable style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Submit</Text>
+          <Text style={styles.submitButtonText}>Create</Text>
         </Pressable>
         <Pressable style={styles.cancelButton} onPress={onClose}>
           <Text style={styles.cancelButtonText}>Cancel</Text>

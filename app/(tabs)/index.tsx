@@ -6,6 +6,7 @@ import {
   View,
   Modal,
   Pressable,
+  TouchableWithoutFeedback,
 } from 'react-native'
 import useApi from '@/hooks/useApi'
 
@@ -77,9 +78,9 @@ export default function HomeScreen() {
       <View
         style={{
           display: 'flex',
-          flexDirection: 'row', // Cambiado a 'row' para disposición horizontal
-          alignItems: 'center', // Opcional: Alinea los elementos verticalmente
-          justifyContent: 'space-between', // Opcional: Espaciado uniforme
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between',
           width: '100%',
           height: 80,
           paddingHorizontal: 28,
@@ -97,7 +98,7 @@ export default function HomeScreen() {
               textAlign: 'center', // Asegura que el texto esté centrado
             }}
           >
-            Button
+            New Project
           </ThemedText>
         </Pressable>
       </View>
