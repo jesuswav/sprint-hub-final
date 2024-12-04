@@ -106,7 +106,11 @@ export default function HomeScreen() {
       <ThemedView style={{ gap: 18 }}>
         {projects.map((item, index) => (
           <ThemedView key={index}>
-            <ProjectItem projectName={item.nombre} tasks={item.tareas} />
+            <ProjectItem
+              projectName={item.nombre}
+              projectId={item._id}
+              tasks={item.tareas}
+            />
           </ThemedView>
         ))}
       </ThemedView>

@@ -54,8 +54,9 @@ const ITEM_WIDTH = Dimensions.get('window').width / numColumns - 25
 
 export default function ProyectPage() {
   // recibir las tareas por medio de parametros de router
-  const { projectName, tasks } = useLocalSearchParams<{
+  const { projectName, projectId, tasks } = useLocalSearchParams<{
     projectName?: string
+    projectId?: string
     tasks?: string // Aquí pasamos tasks como string para luego parsearlo
   }>()
 
@@ -122,7 +123,11 @@ export default function ProyectPage() {
         visible={isModalVisible}
         onRequestClose={closeModal}
       >
-        <TaskForm onClose={closeModal} />
+        <TaskForm
+          onClose={closeModal}
+          projectIdProp={projectId}
+          projectName={projectName}
+        />
       </Modal>
     </ThemedFlatView>
   )

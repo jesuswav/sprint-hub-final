@@ -7,6 +7,7 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  Alert,
 } from 'react-native'
 
 interface FormModalProps {
@@ -15,10 +16,44 @@ interface FormModalProps {
 
 const FormModal: React.FC<FormModalProps> = ({ onClose }) => {
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
+  const [desciption, setDescription] = useState('')
 
-  const handleSubmit = () => {
-    console.log({ name, email })
+  const handleSubmit = async () => {
+    console.log({ name, desciption })
+    // enviar los datos al servidor
+    const url = 'http://192.168.0.112:5000/api/proyectos'
+    const body = {
+      nombre: name,
+      descripcion: desciption,
+    }
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+
+      if (response.ok) {
+        const data = await response.json()
+        Alert.alert('Éxito', 'Proyecto creado correctamente', [{ text: 'OK' }])
+        console.log('Respuesta:', data)
+      } else {
+        const errorData = await response.json()
+        Alert.alert(
+          'Error',
+          `Error al crear el proyecto: ${errorData.message}`,
+          [{ text: 'OK' }]
+        )
+      }
+    } catch (error) {
+      console.error('Error en la petición:', error)
+      Alert.alert('Error', 'Hubo un problema al conectar con el servidor.', [
+        { text: 'OK' },
+      ])
+    }
     onClose()
   }
 
@@ -44,9 +79,8 @@ const FormModal: React.FC<FormModalProps> = ({ onClose }) => {
           style={styles.input}
           placeholder='Description'
           placeholderTextColor='#888'
-          keyboardType='email-address'
-          value={email}
-          onChangeText={setEmail}
+          value={desciption}
+          onChangeText={setDescription}
         />
 
         {/* Botones */}

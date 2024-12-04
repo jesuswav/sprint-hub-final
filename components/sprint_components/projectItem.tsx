@@ -16,6 +16,7 @@ export type ThemedViewProps = ViewProps & {
   lightColor?: string
   darkColor?: string
   projectName?: string
+  projectId?: string
   tasks?: Task[]
 }
 
@@ -23,6 +24,7 @@ const ProjectItem = ({
   lightColor,
   darkColor,
   projectName,
+  projectId,
   tasks,
 }: ThemedViewProps) => {
   const router = useRouter()
@@ -31,7 +33,11 @@ const ProjectItem = ({
     // Navega a la pantalla de detalles pasando el arreglo completo en JSON
     router.push({
       pathname: '/projectPage',
-      params: { projectName: projectName, tasks: JSON.stringify(tasks) },
+      params: {
+        projectName: projectName,
+        projectId: projectId,
+        tasks: JSON.stringify(tasks),
+      },
     })
   }
 

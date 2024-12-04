@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   TouchableOpacity,
+  Alert,
 } from 'react-native'
 
 // time pickers
@@ -15,10 +16,16 @@ import { Picker } from '@react-native-picker/picker'
 import DateTimePicker from '@react-native-community/datetimepicker'
 
 interface FormModalProps {
+  projectIdProp?: string
+  projectName?: string
   onClose: () => void
 }
 
-const TaskForm: React.FC<FormModalProps> = ({ onClose }) => {
+const TaskForm: React.FC<FormModalProps> = ({
+  onClose,
+  projectIdProp,
+  projectName,
+}) => {
   // estados para el formulario
   const [name, setName] = useState('')
   const [startDate, setStartDate] = useState<Date | undefined>(undefined)
@@ -29,13 +36,10 @@ const TaskForm: React.FC<FormModalProps> = ({ onClose }) => {
 
   // para los proyectos y responsables desde la api
   const [projects, setProjects] = useState([
-    { id: '674fa7e675c85aa64e39e9b0', nombre: 'Proyecto A' },
-    { id: '674fa7e675c85aa64e39e9b2', nombre: 'Proyecto B' },
-  ])
-  const [members, setMembers] = useState([
+    { id: projectIdProp, nombre: projectName },
     { id: '674fa9750af4be9629c58ce7', nombre: 'Carlos García' },
-    { id: '674fa9750af4be9629c58ce5', nombre: 'Alan García' },
   ])
+  const [members, setMembers] = useState([])
 
   // nose
   const [showInicioPicker, setShowInicioPicker] = useState(false)
@@ -55,9 +59,102 @@ const TaskForm: React.FC<FormModalProps> = ({ onClose }) => {
   }
 
   const handleSubmit = () => {
-    console.log({ name, startDate, endDate, projectId, responsibleId })
+    if (
+      !name ||
+      !startDate ||
+      !endDate ||
+      !state ||
+      !projectId ||
+      !responsibleId
+    ) {
+      console.log('Por favor complete todos los campos')
+      return
+    }
+    console.log({ name, startDate, endDate, state, projectId, responsibleId })
+
+    // enviar los datos por medio de una funcion
+    registerTask()
+
+    // cerrar el modal despues de la peticion
     onClose()
   }
+
+  // Función para enviar la solicitud
+  const registerTask = async () => {
+    const body = {
+      nombre: name,
+      fechaInicio: startDate,
+      fechaEntrega: endDate,
+      estado: state,
+      idProyecto: projectId,
+      responsableId: responsibleId,
+    }
+
+    try {
+      const response = await fetch(
+        'http://192.168.0.112:5000/api/tareas/registrar',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(body),
+        }
+      )
+
+      if (response.ok) {
+        Alert.alert('Éxito', 'Tarea registrada correctamente')
+        console.log(await response.json()) // Opcional: Ver la respuesta del servidor
+      } else {
+        Alert.alert('Error', 'No se pudo registrar la tarea')
+        console.error(await response.text()) // Opcional: Ver errores del servidor
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Ocurrió un problema al realizar la solicitud')
+      console.error(error)
+    }
+  }
+
+  // traer los proyectos para renderizar en los estados
+  const [allProjects, setAllProjects] = useState<any[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  // Función para obtener datos desde un endpoint
+  const getData = async () => {
+    setLoading(true)
+    setError(null)
+
+    try {
+      const response = await fetch(
+        `http://192.168.0.112:5000/api/proyectos/${projectIdProp}`,
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`)
+      }
+
+      const data = await response.json()
+      setMembers(data.miembros) // Actualizar el estado con los datos recibidos
+      console.log('Response:', data.miembros)
+    } catch (err: any) {
+      setError(err.message)
+      console.error('Fetch error:', err.message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    // Llama a la función al montar el componente
+    getData()
+  }, [])
 
   return (
     <KeyboardAvoidingView
@@ -177,9 +274,9 @@ const TaskForm: React.FC<FormModalProps> = ({ onClose }) => {
               <Picker.Item label='Seleccionar responsable' value='' />
               {members.map((member) => (
                 <Picker.Item
-                  key={member.id}
+                  key={member._id}
                   label={member.nombre}
-                  value={member.id}
+                  value={member._id}
                 />
               ))}
             </Picker>
