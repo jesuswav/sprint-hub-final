@@ -47,6 +47,7 @@ export default function RootLayout() {
         <Stack.Screen
           name='projectPage'
           options={{
+            headerTitle: 'Project Page',
             headerLeft: () => null,
             headerBackTitle: 'back',
             headerTintColor: '#F5A818',
@@ -55,6 +56,7 @@ export default function RootLayout() {
         <Stack.Screen
           name='taskPage'
           options={{
+            headerTitle: 'Task Page',
             headerLeft: () => null,
             headerBackTitle: 'back',
             headerTintColor: '#F5A818',

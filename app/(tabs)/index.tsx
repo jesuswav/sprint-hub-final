@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { Image, StyleSheet, Platform } from 'react-native'
+import {
+  Image,
+  StyleSheet,
+  Platform,
+  View,
+  Modal,
+  Pressable,
+} from 'react-native'
 import useApi from '@/hooks/useApi'
 
 import { HelloWave } from '@/components/HelloWave'
@@ -7,6 +14,7 @@ import ParallaxScrollView from '@/components/ParallaxScrollView'
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
 import ProjectItem from '@/components/sprint_components/projectItem'
+import FormModal from '@/components/sprint_components/FormModal'
 
 type Project = {
   status: string // Estado del proyecto (ej. "Pendiente")
@@ -58,8 +66,42 @@ export default function HomeScreen() {
     getData()
   }, [])
 
+  // metodos para el modal
+  const [isModalVisible, setModalVisible] = useState(false)
+
+  const openModal = () => setModalVisible(true)
+  const closeModal = () => setModalVisible(false)
+
   return (
     <ThemedView style={styles.HomeScreenContainer}>
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'row', // Cambiado a 'row' para disposición horizontal
+          alignItems: 'center', // Opcional: Alinea los elementos verticalmente
+          justifyContent: 'space-between', // Opcional: Espaciado uniforme
+          width: '100%',
+          height: 80,
+          paddingHorizontal: 28,
+        }}
+      >
+        <ThemedText type='title'>Projects</ThemedText>
+        {/* Botón */}
+        <Pressable onPress={openModal}>
+          <ThemedText
+            style={{
+              backgroundColor: '#F5A818',
+              paddingVertical: 4,
+              paddingHorizontal: 12,
+              borderRadius: 12,
+              textAlign: 'center', // Asegura que el texto esté centrado
+            }}
+          >
+            Button
+          </ThemedText>
+        </Pressable>
+      </View>
+      {/* contenido de la pagina */}
       <ThemedView style={{ gap: 18 }}>
         {projects.map((item, index) => (
           <ThemedView key={index}>
@@ -67,6 +109,14 @@ export default function HomeScreen() {
           </ThemedView>
         ))}
       </ThemedView>
+      <Modal
+        animationType='slide'
+        transparent={true}
+        visible={isModalVisible}
+        onRequestClose={closeModal}
+      >
+        <FormModal onClose={closeModal} />
+      </Modal>
     </ThemedView>
   )
 }

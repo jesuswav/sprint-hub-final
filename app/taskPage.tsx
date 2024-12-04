@@ -15,8 +15,8 @@ const TaskPage = () => {
   console.log(parsedTasks)
 
   return (
-    <ThemedView>
-      <ThemedText>{parsedTasks.nombre}</ThemedText>
+    <ThemedView style={{ padding: 18 }}>
+      <ThemedText type='title'>{parsedTasks.nombre}</ThemedText>
     </ThemedView>
   )
 }
