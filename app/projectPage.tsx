@@ -6,8 +6,11 @@ import {
   Dimensions,
   Pressable,
   Modal,
+  Text,
+  Alert,
 } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
+import { useRouter } from 'expo-router'
 
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedFlatView } from '@/components/ThemedFlatView'
@@ -70,6 +73,46 @@ export default function ProyectPage() {
     </View>
   )
 
+  // declaracion del router
+  const router = useRouter()
+  // funcion para eliminar un proyecto
+  const handleDelete = () => {
+    // funcion para borrar el proyecto
+    deleteProyect()
+    // redirijir a la pantalla anterior al borrar el proyecto
+    router.back()
+  }
+
+  const deleteProyect = async () => {
+    try {
+      // Hacer la solicitud DELETE usando fetch
+      const response = await fetch(
+        `http://192.168.0.112:5000/api/proyectos/${projectId}`,
+        {
+          method: 'DELETE', // Definir el método como DELETE
+          headers: {
+            'Content-Type': 'application/json', // Cabecera con el tipo de contenido
+          },
+        }
+      )
+
+      // Si la respuesta no es exitosa, lanzar error
+      if (!response.ok) {
+        throw new Error('Error al eliminar el proyecto')
+      }
+
+      // Si la respuesta es exitosa, obtener la respuesta JSON
+      const data = await response.json()
+
+      // Mostrar una alerta de éxito
+      Alert.alert('Éxito', 'Proyecto eliminado con éxito')
+      console.log(data) // Opcional: Ver los datos que se retornan del servidor
+    } catch (error: any) {
+      // Si ocurre un error, mostrar una alerta de error
+      Alert.alert('Error', error.message)
+    }
+  }
+
   // metodos para el modal
   // metodos para el modal
   const [isModalVisible, setModalVisible] = useState(false)
@@ -129,6 +172,9 @@ export default function ProyectPage() {
           projectName={projectName}
         />
       </Modal>
+      <Pressable style={styles.cancelButton} onPress={handleDelete}>
+        <Text style={styles.cancelButtonText}>Eliminar Proyecto</Text>
+      </Pressable>
     </ThemedFlatView>
   )
 }
@@ -159,5 +205,21 @@ const styles = StyleSheet.create({
   container: {
     // paddingHorizontal: 10,
     // paddingTop: 20,
+  },
+  // button styles
+  cancelButton: {
+    position: 'absolute',
+    bottom: 50,
+    left: 20,
+    width: '45%',
+    backgroundColor: '#F44336', // Botón de cancelar en rojo
+    paddingVertical: 14,
+    borderRadius: 12,
+  },
+  cancelButtonText: {
+    color: '#FFFFFF', // Texto blanco en el botón
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
 })
