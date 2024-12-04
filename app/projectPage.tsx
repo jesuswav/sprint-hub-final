@@ -15,6 +15,7 @@ import FormModal from '@/components/sprint_components/FormModal'
 
 // Componentes de la aplicación
 import TaskItem from '@/components/sprint_components/taskItem'
+import TaskForm from '@/components/sprint_components/TaskForm'
 
 // Interfaz para el tipo de datos
 interface Responsable {
@@ -101,7 +102,7 @@ export default function ProyectPage() {
                   textAlign: 'center', // Asegura que el texto esté centrado
                 }}
               >
-                New Project
+                New Task
               </ThemedText>
             </Pressable>
           </View>
@@ -121,7 +122,7 @@ export default function ProyectPage() {
         visible={isModalVisible}
         onRequestClose={closeModal}
       >
-        <FormModal onClose={closeModal} />
+        <TaskForm onClose={closeModal} />
       </Modal>
     </ThemedFlatView>
   )

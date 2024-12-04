@@ -28,7 +28,7 @@ const FormModal: React.FC<FormModalProps> = ({ onClose }) => {
       style={styles.modalBackground}
     >
       <View style={styles.modalContainer}>
-        <Text style={styles.modalTitle}>Fill the Form</Text>
+        <Text style={styles.modalTitle}>Create New Project</Text>
 
         {/* Input de nombre */}
         <TextInput
