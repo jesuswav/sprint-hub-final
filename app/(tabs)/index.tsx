@@ -31,7 +31,7 @@ export default function HomeScreen() {
     setError(null)
 
     try {
-      const response = await fetch('http://192.168.0.112:3003/api/projects', {
+      const response = await fetch('http://192.168.0.112:5000/api/proyectos', {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -63,7 +63,7 @@ export default function HomeScreen() {
       <ThemedView style={{ gap: 18 }}>
         {projects.map((item, index) => (
           <ThemedView key={index}>
-            <ProjectItem projectName={item.name} />
+            <ProjectItem projectName={item.nombre} tasks={item.tareas} />
           </ThemedView>
         ))}
       </ThemedView>

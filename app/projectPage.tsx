@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, View, FlatList, Dimensions } from 'react-native'
 import { useLocalSearchParams } from 'expo-router'
 
@@ -8,42 +8,69 @@ import { ThemedFlatView } from '@/components/ThemedFlatView'
 // Componentes de la aplicación
 import TaskItem from '@/components/sprint_components/taskItem'
 
-// Simulación de datos
+// Interfaz para el tipo de datos
+interface Responsable {
+  _id: string
+  email: string
+  nombre: string
+}
+
 interface Item {
   id: string
-  title: string
+  nombre: string
+  estado: string
+  fechaEntrega: string
+  fechaInicio: string
+  responsable: Responsable
 }
 
 const data: Item[] = [
-  { id: '1', title: 'Item 1' },
-  { id: '2', title: 'Item 2' },
-  { id: '3', title: 'Item 3' },
-  { id: '4', title: 'Item 4' },
-  { id: '5', title: 'Item 5' },
-  { id: '6', title: 'Item 6' },
+  {
+    id: '674faaa332a2f15c16c0ab1f',
+    nombre: 'Desarrollar API',
+    estado: 'pendiente',
+    fechaEntrega: '2024-12-20T00:00:00.000Z',
+    fechaInicio: '2024-12-10T00:00:00.000Z',
+    responsable: {
+      _id: '674fa9750af4be9629c58ce7',
+      email: 'carlos@example.com',
+      nombre: 'Carlos García',
+    },
+  },
+  // Agrega más datos según sea necesario
 ]
 
 const numColumns = 2
 const ITEM_WIDTH = Dimensions.get('window').width / numColumns - 25
 
 export default function ProyectPage() {
-  const { proyectName } = useLocalSearchParams<{ proyectName?: string }>()
+  // estado para guardar las tareas
+  const [projectTasks, setProjectTasks] = useState()
+
+  // recibir las tareas por medio de parametros de router
+  const { projectName, tasks } = useLocalSearchParams<{
+    projectName?: string
+    tasks?: string // Aquí pasamos tasks como string para luego parsearlo
+  }>()
+
+  // Parsear tasks si existe
+  const parsedTasks = tasks ? JSON.parse(tasks) : []
 
   // Asegúrate de que `item` sea del tipo `Item`, que coincide con la estructura de `data`
   const renderItem = ({ item }: { item: Item }) => (
     <View style={styles.itemContainer}>
-      <TaskItem title={item.title} />
+      <TaskItem title={item.nombre} />
     </View>
   )
 
   return (
     <ThemedFlatView style={styles.HomeScreenContainer}>
       <View style={styles.titleContainer}>
-        <ThemedText type='title'>Proyect Page</ThemedText>
-        <ThemedText type='subtitle'>{proyectName}</ThemedText>
+        <ThemedText type='title'>Project Page</ThemedText>
+        <ThemedText type='subtitle'>{projectName}</ThemedText>
       </View>
       <FlatList
-        data={data}
+        data={parsedTasks}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
         numColumns={numColumns}

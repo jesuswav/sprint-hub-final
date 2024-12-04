@@ -5,16 +5,25 @@ import { useRouter } from 'expo-router'
 
 import { useThemeColor } from '@/hooks/useThemeColor'
 
+// type for Tasks
+export type Task = {
+  id: string
+  name: string
+  // Agrega más propiedades según sea necesario
+}
+
 export type ThemedViewProps = ViewProps & {
   lightColor?: string
   darkColor?: string
   projectName?: string
+  tasks?: Task[]
 }
 
 const ProjectItem = ({
   lightColor,
   darkColor,
   projectName,
+  tasks,
 }: ThemedViewProps) => {
   const router = useRouter()
 
@@ -22,7 +31,7 @@ const ProjectItem = ({
     // Navega a la pantalla de detalles pasando el arreglo completo en JSON
     router.push({
       pathname: '/projectPage',
-      params: { proyectName: 'Proyecto Uno' },
+      params: { projectName: projectName, tasks: JSON.stringify(tasks) },
     })
   }
 
